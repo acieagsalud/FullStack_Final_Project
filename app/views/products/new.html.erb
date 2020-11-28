@@ -1,0 +1,14 @@
+<h1>Newly Added Products</h1>
+
+<% if @new_products.empty? %>
+ <p>There are currently newly added products. Check back for a future udpates.</p>
+<% else %>
+  <ul>
+    <% @new_products.each do |product| %>
+      <li>
+        <%= link_to "[#{product.manufacturer.name}]", product %>
+        <%= link_to "#{product.name}", product %>
+      </li>
+    <% end %>
+  </ul>
+<% end %>

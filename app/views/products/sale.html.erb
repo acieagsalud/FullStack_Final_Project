@@ -1,0 +1,14 @@
+<h1>Sale Products</h1>
+
+<% if @sale_products.empty? %>
+ <p>There are currently no products on sale. Check back for a future sales.</p>
+<% else %>
+  <ul>
+    <% @sale_products.each do |product| %>
+      <li>
+        <%= link_to "[#{product.manufacturer.name}]", product %>
+        <%= link_to "#{product.name}", product %>
+      </li>
+    <% end %>
+  </ul>
+<% end %>

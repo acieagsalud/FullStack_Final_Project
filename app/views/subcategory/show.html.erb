@@ -1,2 +1,7 @@
-<h1>Subcategory#show</h1>
-<p>Find me in app/views/subcategory/show.html.erb</p>
+<h1><%= @subcategory.name %></h1>
+
+<ul>
+  <% @subcategory.products.each do |prod| %>
+    <li><%= link_to prod.name, prod %></li>
+  <% end %>
+</ul>

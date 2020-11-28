@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_27_071628) do
+ActiveRecord::Schema.define(version: 2020_11_27_222224) do
 
   create_table "active_admin_comments", force: :cascade do |t|
     t.string "namespace"
@@ -69,6 +69,7 @@ ActiveRecord::Schema.define(version: 2020_11_27_071628) do
     t.integer "subcategory_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "image"
     t.index ["manufacturer_id"], name: "index_products_on_manufacturer_id"
     t.index ["subcategory_id"], name: "index_products_on_subcategory_id"
   end
@@ -89,7 +90,20 @@ ActiveRecord::Schema.define(version: 2020_11_27_071628) do
     t.index ["category_id"], name: "index_subcategories_on_category_id"
   end
 
+  create_table "users", force: :cascade do |t|
+    t.string "username"
+    t.string "password_digest"
+    t.string "name"
+    t.string "email"
+    t.string "address"
+    t.integer "province_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["province_id"], name: "index_users_on_province_id"
+  end
+
   add_foreign_key "products", "manufacturers"
   add_foreign_key "products", "subcategories"
   add_foreign_key "subcategories", "categories"
+  add_foreign_key "users", "provinces"
 end

@@ -1,0 +1,41 @@
+<h2>[<%= link_to @product.manufacturer.name, @product %>] <%= @product.name %> </h2>
+<h5>
+  <%= link_to "#{@product.subcategory.category.name}", @product %> >
+  <%= link_to "#{@product.subcategory.name}", @product %>
+</h5>
+
+<div class="container">
+  <div class="row">
+    <img src="<%= @product.image %>" alt="No photo available"/>
+    <ul>
+      <li>Description: <%= @product.description %> </li>
+      <li>Price: <%= @product.price %></li>
+      <li>Stock Quantity: <%= @product.stock_qty %> </li>
+      <li>Product Added on: <%= @product.created_at %></li>
+      <hr>
+
+      <% if @cart.include?(@product) %>
+          <%= form_with(url: update_cart_quantity_path(@product.id), method: "patch", class: "form-inline my-2 my-lg-0 input-group") do %>
+            <div class="input-group btn-group">
+              <div class="input-group-prepend">
+                <%= label_tag(:quantity, "Quantity:", class: "input-group-text") %>
+              </div>
+              <%= number_field_tag 'quantity', @cart[@product].to_s, min: 1, max: 5, class: "form-control" %>
+              <%= submit_tag("Update Quantity", class: "btn btn-success") %>
+            </div>
+          <% end %>
+          <%= button_to 'Remove from Cart', remove_from_cart_path(@product.id), method: :delete, class: "btn btn-danger mt-3" %>
+      <% else %>
+        <%= form_with(url: add_to_cart_path(@product.id), method: "post", class: "form-inline my-2 my-lg-0 input-group") do %>
+          <div class="input-group btn-group">
+            <div class="input-group-prepend">
+              <%= label_tag(:quantity, "Quantity:", class: "input-group-text") %>
+            </div>
+            <%= number_field_tag 'quantity', '1', min: 1, max: 5, class: "form-control" %>
+            <%= submit_tag("Add to Cart", class: "btn btn-primary") %>
+          </div>
+        <% end %>
+      <% end %>
+    </ul>
+  </div>
+</div>
