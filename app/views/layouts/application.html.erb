@@ -10,6 +10,40 @@
   </head>
 
   <body>
+    <header>
+      <h1>RAMExpress: For all your computer and memory needs</h1>
+      <p>
+        <%= link_to 'Home', root_path %> |
+        <%= link_to 'Products', products_path %> |
+        <%= link_to 'Categories', category_index_path %> |
+        <%= link_to 'Manufacturers', manufacturer_index_path %> |
+        <%= link_to 'About Us', permalink_path('about_us') %> |
+        <%= link_to 'Contact Us', permalink_path('contact') %>
+      </p>
+      <details>
+        <summary>Shopping Cart</summary>
+        <% if @cart.empty? %>
+          <p>No items in cart.</p>
+        <% else %>
+          <ul>
+            <% @cart.each do |product, quantity| %>
+              <li>
+              <div>
+                <%= quantity %> x <%= product.name %> - <%= link_to 'Remove from cart', remove_from_cart_path(product), method: :delete %>
+                <%= form_with(url: update_cart_quantity_path(product.id), method: "patch") do %>
+                    <%= label_tag(:quantity, "Quantity:", class: "input-group-text") %>
+                  <%= number_field_tag 'quantity', @cart[product].to_s, min: 1, max: 5, class: "form-control" %>
+                  <%= submit_tag("Update Quantity", class: "btn btn-success") %>
+                <% end %>
+              </div>
+
+              </li>
+            <% end %>
+          </ul>
+          <%= button_to 'Checkout', charges_new_path(0), method: :post, params: { id: 0 } %>
+        <% end %>
+      </details>
+    </header>
     <%= yield %>
   </body>
 </html>
