@@ -6,13 +6,16 @@
     <%= csp_meta_tag %>
 
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= stylesheet_pack_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
 
   <body>
     <header>
-      <h1>RAMExpress: For all your computer and memory needs</h1>
+      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href=<%=root_path%>>RAMExpress</a>
       <%= render partial: 'navigation/navbar' %>
+      </nav>
     </header>
     <%= yield %>
   </body>
