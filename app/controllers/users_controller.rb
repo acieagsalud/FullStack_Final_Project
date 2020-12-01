@@ -6,7 +6,7 @@ class UsersController < ApplicationController
   end
 
   def create
-    @user = User.create(username: params[:user_name], password: params[:password], name: params[:name], email: params[:email], province_id: params[:province], address: params[:address])
+    @user = User.create(username: params[:username], password: params[:password], name: params[:name], email: params[:email], province_id: params[:province], address: params[:address])
     session[:user_id] = @user.id
     redirect_to "/welcome"
   end
