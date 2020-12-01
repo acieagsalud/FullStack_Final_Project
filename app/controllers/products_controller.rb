@@ -19,9 +19,6 @@ class ProductsController < ApplicationController
   end
 
   def add_to_cart
-    # id = params[:id].to_i
-    # session[:cart] << id unless session[:cart].include?(id)
-    # redirect_to products_path
     id = params[:id].to_i
     quantity = params[:quantity].to_i
 
@@ -30,10 +27,6 @@ class ProductsController < ApplicationController
   end
 
   def remove_from_cart
-    # id = params[:id].to_i
-    # session[:cart].delete(id)
-    # redirect_to products_path
-
     id = params[:id]
     session[:cart].delete(id)
     redirect_to products_path

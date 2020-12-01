@@ -1,0 +1,66 @@
+<%= debug session[:province] %>
+<%= debug session[:user_id] %>
+<h1>Please Confirm Order Details Before Paying: </h1>
+
+<% @subtotal = 0 %>
+<% @cart.each do |product, quantity| %>
+    <% @subtotal += product.price*quantity%>
+<% end %>
+
+<% if @user.nil? %>
+  <% province = Province.find(session[:province].to_i) %>
+  <% @gst = (@subtotal * province.gst_rate/100).truncate(2) %>
+  <% @pst = (@subtotal * province.pst_rate/100).truncate(2) %>
+<% else %>
+  <% @gst = (@subtotal * (@user.province.gst_rate/100)).truncate(2) %>
+  <% @pst = (@subtotal * (@user.province.pst_rate/100)).truncate(2) %>
+<% end %>
+
+<% @total = @subtotal + @gst + @pst%>
+<label class="amount">
+<ul>
+  <% @cart.each do |product, quantity| %>
+    <li>
+      <%= quantity %> x <%= product.name %> = <strong>$<%= product.price %></strong>
+    </li>
+  <% end %>
+</ul>
+  <p>Subtotal: $<%= @subtotal %></p>
+  <p>GST/HST: $<%= @gst %></p>
+  <p>PST: $<%= @pst %></p>
+  <p>Total: $<%= @total %></p>
+  <% session[:total] = @total %>
+
+  <% if @user.nil? %>
+    <% @id = 1 %>
+    <%= form_with(url: sign_up_path, local: true, method: "post", action: "sign_up") do %>
+      <div class="login-form">
+        <p>Item will be shipped to: </p><%= text_field_tag(:name) %>
+        <p>Password </p><%= password_field_tag(:password) %>
+      </div>
+    <% end %>
+  <% else %>
+    <% @id = @user.id %>
+    <p>Item will be shipped to: <%= @user.name %></p>
+    <p>Address: <%= @user.address %></p>
+  </p>
+<% end %>
+<p>Province: <%= Province.find(session[:province].to_i).name %></p>
+<%= button_to 'Confirm Order Details', create_order_path, method: :post, params: { gst: @gst, pst: @pst, total: @total, subtotal: @subtotal, user_id: @id } %>
+
+<%= form_tag charges_path do %>
+  <article>
+    <% if flash[:error].present? %>
+      <div id="error_explanation">
+        <p><%= flash[:error] %></p>
+      </div>
+    <% end %>
+  </article>
+
+<script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+          data-key="<%= Rails.configuration.stripe[:publishable_key] %>"
+          data-description="RAMExpress Order"
+          data-amount="<%=@total*100%>"
+          data-locale="cad"></script>
+<% end %>
+

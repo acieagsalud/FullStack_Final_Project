@@ -1,17 +1,12 @@
 <h1>Sign Up</h1>
-<%= form_for @user do |f|%>
-  <%= f.label :username%><br>
-  <%= f.text_field :username%><br>
-  <%= f.label :password%><br>
-  <%= f.password_field :password%><br>
-  <%= f.label :name%><br>
-  <%= f.text_field :name%><br>
-  <%= f.label :email%><br>
-  <%= f.text_field :email%><br>
-  <%= f.label :address%><br>
-  <%= f.text_field :address%><br>
-  <%= f.label :province%><br>
-  <%= select_tag "province", options_from_collection_for_select(Province.all, "id", "name") %><br>
-
-  <%= f.submit %>
-<%end%>
+<%= form_with(url: sign_up_path, local: true, method: "post", action: "sign_up") do %>
+  <div>
+    <p>Username </p><%= text_field_tag(:username) %>
+    <p>Password </p><%= password_field_tag(:password) %>
+    <p>Name </p><%= text_field_tag(:name) %>
+    <p>Email </p><%= text_field_tag(:email) %>
+    <p>Address </p><%= text_field_tag(:address) %>
+    <p>Province </p><%= select_tag "province", options_from_collection_for_select(Province.all, "id", "name") %>
+    <div><%= submit_tag("Create User") %></div>
+  </div>
+<% end %>

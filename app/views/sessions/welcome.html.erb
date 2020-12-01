@@ -1,6 +1,22 @@
-<h1>Welcome</h1>
+<h1>Welcome back</h1>
 <% if logged_in? %>
-  <h1>You are Logged In, <%= current_user.username %></h1>
+  <h1>Your orders:</h1>
+  <% if @orders.empty? %>
+  <p>You haven't made any orders.</p>
+  <% else %>
+    <ul>
+      <% @orders.each do |order| %>
+        <li>
+          Order placed on: <%= order.order_date %>
+          <ul>
+            <li>Subtotal: $<%= order.subtotal %></li>
+            <li>GST/HST Paid: $<%= order.gst %></li>
+            <li>PST Paid: $<%= order.pst %></li>
+            <li>Total: $<%= order.total %></li>
+            <li>Status: <%= order.status %></li>
+          </ul>
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
 <%end%>
-<%= button_to "Login", '/login', method: :get%>
-<%= button_to "Sign Up", '/users/new', method: :get%>

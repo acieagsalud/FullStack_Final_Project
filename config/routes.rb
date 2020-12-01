@@ -4,6 +4,10 @@ Rails.application.routes.draw do
   post "login", to: "sessions#create"
   get "welcome", to: "sessions#welcome"
   get "authorized", to: "sessions#page_requires_login"
+  post "sign_up", to: "users#create", as: "sign_up"
+  resource "sign_out", to: "sessions#sign_out", as: "sign_out"
+
+  post "set_province", to: "sessions#set_province", as: "set_province"
 
   get "products/index"
   get "products/show"
@@ -22,6 +26,9 @@ Rails.application.routes.draw do
   scope "/charges" do
     post "create/:id", to: "charges#new", as: "charges_new"
   end
+
+  post "create_order", to: "checkout#create_order", as: "create_order"
+  post "update_order", to: "checkout#update_order", as: "update_order"
 
   resources :charges
 

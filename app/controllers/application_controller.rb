@@ -15,13 +15,15 @@ class ApplicationController < ActionController::Base
   end
 
   def authorized
-    redirect_to "/welcome" unless logged_in?
+    # redirect_to "/welcome" unless logged_in?
   end
 
   private
 
   def initialize_session
-    @user_id = session[:user]
+    unless session[:user_id].nil?
+      @user = User.find(session[:user_id].to_i) unless session[:user_id].nil?
+    end
     session[:cart] ||= {}
   end
 
