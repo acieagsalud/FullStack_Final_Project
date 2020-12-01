@@ -6,15 +6,19 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 # AdminUser.create!(email: 'admin@example.com', password: 'password', password_confirmation: 'password') if Rails.env.development?
+Product.destroy_all
 
-NUMBER_OF_PRODUCTS_TO_CREATE = 100
+100.times do
+  name = Faker::Commerce.unique.product_name
+  product = Product.create(name:            name,
+                        description:     Faker::TvShows::MichaelScott.quote,
+                        price:           Faker::Number.within(range: 1500..20_000),
+                        stock_qty:       Faker::Number.within(range: 0..75),
+                        manufacturer_id: rand(1..6),
+                        subcategory_id:  rand(1..5))
+  downloaded_image = open(URI.open("https://source.unsplash.com/random/800x600/?#{name.split(' ')[2]}"))
+  product.image.attach(io: downloaded_image, filename: "m-#{name.split(' ')[2]}.jpg")
 
-NUMBER_OF_PRODUCTS_TO_CREATE.times do
-  subcategory = Subcategory.find(rand(1..5))
-  manufacturer = Manufacturer.find(rand(1..6))
-  subcategory.products.create(name:            Faker::Appliance.equipment,
-                              description:     Faker::TvShows::MichaelScott.quote,
-                              price:           Faker::Number.decimal(l_digits: 2),
-                              stock_qty:       Faker::Number.number(digits: 2),
-                              manufacturer_id: manufacturer.id)
+  puts "Created #{product.name}"
+  sleep(1)
 end
