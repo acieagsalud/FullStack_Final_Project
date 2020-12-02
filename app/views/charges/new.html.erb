@@ -1,66 +1,94 @@
-<%= debug session[:province] %>
-<%= debug session[:user_id] %>
-<h1>Please Confirm Order Details Before Paying: </h1>
+<div class="container text-center text-md-left pt-4 pt-md-5">
+  <h1>Please Confirm Order Details Before Paying: </h1>
 
-<% @subtotal = 0 %>
-<% @cart.each do |product, quantity| %>
-    <% @subtotal += product.price*quantity%>
-<% end %>
-
-<% if @user.nil? %>
-  <% province = Province.find(session[:province].to_i) %>
-  <% @gst = (@subtotal * province.gst_rate/100).truncate(2) %>
-  <% @pst = (@subtotal * province.pst_rate/100).truncate(2) %>
-<% else %>
-  <% @gst = (@subtotal * (@user.province.gst_rate/100)).truncate(2) %>
-  <% @pst = (@subtotal * (@user.province.pst_rate/100)).truncate(2) %>
-<% end %>
-
-<% @total = @subtotal + @gst + @pst%>
-<label class="amount">
-<ul>
+  <% @subtotal = 0 %>
   <% @cart.each do |product, quantity| %>
-    <li>
-      <%= quantity %> x <%= product.name %> = <strong>$<%= product.price %></strong>
-    </li>
+      <% @subtotal += product.price*quantity%>
   <% end %>
-</ul>
-  <p>Subtotal: $<%= @subtotal %></p>
-  <p>GST/HST: $<%= @gst %></p>
-  <p>PST: $<%= @pst %></p>
-  <p>Total: $<%= @total %></p>
-  <% session[:total] = @total %>
 
   <% if @user.nil? %>
-    <% @id = 1 %>
-    <%= form_with(url: sign_up_path, local: true, method: "post", action: "sign_up") do %>
-      <div class="login-form">
-        <p>Item will be shipped to: </p><%= text_field_tag(:name) %>
-        <p>Password </p><%= password_field_tag(:password) %>
-      </div>
-    <% end %>
+    <% province = Province.find(session[:province].to_i) %>
+    <% @gst = (@subtotal * province.gst_rate/100).truncate(2) %>
+    <% @pst = (@subtotal * province.pst_rate/100).truncate(2) %>
   <% else %>
-    <% @id = @user.id %>
-    <p>Item will be shipped to: <%= @user.name %></p>
-    <p>Address: <%= @user.address %></p>
-  </p>
-<% end %>
-<p>Province: <%= Province.find(session[:province].to_i).name %></p>
-<%= button_to 'Confirm Order Details', create_order_path, method: :post, params: { gst: @gst, pst: @pst, total: @total, subtotal: @subtotal, user_id: @id } %>
+    <% @gst = (@subtotal * (@user.province.gst_rate/100)).truncate(2) %>
+    <% @pst = (@subtotal * (@user.province.pst_rate/100)).truncate(2) %>
+  <% end %>
+  <div class="card-body">
+    <div class="login-form">
+      <% @total = @subtotal + @gst + @pst%>
+      <label class="amount">
+      <ul>
+        <% @cart.each do |product, quantity| %>
+          <li>
+            <%= quantity %> x <%= product.name %> = <strong>$<%= product.price * quantity %></strong>
+          </li>
+        <% end %>
+      </ul>
+      <h5 class="mb-3">The total amount of</h5>
 
-<%= form_tag charges_path do %>
-  <article>
-    <% if flash[:error].present? %>
-      <div id="error_explanation">
-        <p><%= flash[:error] %></p>
-      </div>
-    <% end %>
-  </article>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
+          Subtotal
+          <span><%= number_to_currency(@subtotal) %></span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
+          GST/HST
+          <span><%= number_to_currency(@gst) %></span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
+          PST
+          <span><%= number_to_currency(@pst) %></span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+          Shipping
+          <i>Free</i>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
+          <div>
+            <strong>The total amount of</strong>
+            <strong>
+              <p class="mb-0">(including Taxes)</p>
+            </strong>
+          </div>
+          <span><strong><%= number_to_currency(@total) %></strong></span>
+          <% session[:total] = @total %>
+        </li>
+      </ul>
 
-<script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-          data-key="<%= Rails.configuration.stripe[:publishable_key] %>"
-          data-description="RAMExpress Order"
-          data-amount="<%=@total*100%>"
-          data-locale="cad"></script>
-<% end %>
+        <% if @user.nil? %>
+          <% @id = 1 %>
+          <%= form_with(url: sign_up_path, local: true, method: "post", action: "sign_up") do %>
+            <div class="login-form">
+              <p>Item will be shipped to: </p><%= text_field_tag(:name) %>
+              <p>Address: </p><%= text_field_tag(:address) %>
+            </div>
+          <% end %>
+        <% else %>
+          <% @id = @user.id %>
+          <p>Item will be shipped to: <%= @user.name %></p>
+          <p>Address: <%= @user.address %></p>
+        </p>
+      <% end %>
+      <p>Province: <%= Province.find(session[:province].to_i).name %></p>
+      <%= button_to 'Confirm Order Details', create_order_path, method: :post, class: "btn btn-primary btn-block waves-effect waves-light", params: { gst: @gst, pst: @pst, total: @total, subtotal: @subtotal, user_id: @id } %>
+    </div>
 
+  <%= form_tag charges_path do %>
+    <article>
+      <% if flash[:error].present? %>
+        <div id="error_explanation">
+          <p><%= flash[:error] %></p>
+        </div>
+      <% end %>
+    </article>
+
+  <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+            data-key="<%= Rails.configuration.stripe[:publishable_key] %>"
+            data-description="RAMExpress Order"
+            data-amount="<%=@total*100%>"
+            data-locale="cad"></script>
+  <% end %>
+
+  </div>
+</div>

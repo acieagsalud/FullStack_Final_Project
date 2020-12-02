@@ -1,38 +1,41 @@
-<h1>Products</h1>
+<div class="container text-center text-md-left pt-4 pt-md-5">
+  <h1>Products</h1>
 
-<h3>
-  Check out our <%= link_to 'products on sale', products_sale_path %> or our
-  <%= link_to 'new products', products_new_path %>
-</h3>
+  <h3>
+    Check out our <%= link_to 'products on sale', products_sale_path %> or our
+    <%= link_to 'new products', products_new_path %>
+  </h3>
 
-<h3>Or search for a specific product</h3>
-<%= search_form_for @search do |f| %>
-  <%= f.condition_fields do |c| %>
-    <%= c.attribute_fields do |a| %>
-      <%= a.attribute_select associations: [:subcategory]%>
+  <h3>Or search for a specific product</h3>
+  <form class="form-inline">
+    <%= search_form_for @search do |f| %>
+      <%= f.condition_fields do |c| %>
+        <%= c.attribute_fields do |a| %>
+          <%= a.attribute_select associations: [:subcategory]%>
+        <% end %>
+      <%= c.predicate_select only: [:cont, :lteq, :gteq]%>
+      <%= c.value_fields do |v| %>
+        <%= v.text_field :value %>
+      <%end %>
+    <%end %>
+    <%= f.submit %>
+      <%= button_to "Reset Search", products_path %>
     <% end %>
-  <%= c.predicate_select only: [:cont, :lteq, :gteq]%>
-  <%= c.value_fields do |v| %>
-    <%= v.text_field :value %>
-  <%end %>
-<%end %>
-<%= f.submit %>
-  <%= link_to "Reset Search", products_path %>
-<% end %>
+  </form>
+  <hr>
 
-<hr>
+  <% if @products.empty? %>
+  <p>There are currently no products in our store. Check back for a future restock.</p>
+  <% else %>
+    <ul>
+      <% @products.each do |product| %>
+        <li>
+          <%= link_to "[#{product.manufacturer.name}]", product %>
+          <%= link_to "#{product.name}", product %>
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
 
-<% if @products.empty? %>
- <p>There are currently no products in our store. Check back for a future restock.</p>
-<% else %>
-  <ul>
-    <% @products.each do |product| %>
-      <li>
-        <%= link_to "[#{product.manufacturer.name}]", product %>
-        <%= link_to "#{product.name}", product %>
-      </li>
-    <% end %>
-  </ul>
-<% end %>
-
-<%= paginate @products %>
+  <%= paginate @products %>
+</div>

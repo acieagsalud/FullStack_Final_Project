@@ -1,8 +1,10 @@
-<h2><%= @page.title %></h2>
+<div class="container text-center text-md-left pt-4 pt-md-5">
+  <h2><%= @page.title %></h2>
 
-<article>
-  <%= @page.content %>
-</article>
+  <article>
+    <%= @page.content %>
+  </article>
 
-<br>
-<p>Last updated: <%= @page.updated_at %></p>
+  <br>
+  <p>Last updated: <%= @page.updated_at %></p>
+</div>
