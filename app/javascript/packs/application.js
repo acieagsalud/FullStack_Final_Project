@@ -17,6 +17,7 @@ require("channels")
 // const imagePath = (name) => images(name, true)
 
 import "bootstrap";
+missimport 'jquery'
 import "../stylesheets/application"
 
 document.addEventListener("turbolinks:load", () => {
