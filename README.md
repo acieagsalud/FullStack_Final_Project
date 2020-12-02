@@ -1,24 +1,21 @@
-# README
+# RandomAccessMemoryExpress!
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+This is the Final Project for Fullstack Web Development at RRC
 
-Things you may want to cover:
+* Ruby 2.7.1
 
-* Ruby version
+* Rails 6.0.3
 
-* System dependencies
+The following gems are used
 
-* Configuration
+* ActiveAdmin
 
-* Database creation
+* Devise
 
-* Database initialization
+* Faker
 
-* How to run the test suite
+* Kaminari
 
-* Services (job queues, cache servers, search engines, etc.)
+* Ransack
 
-* Deployment instructions
-
-* ...
+* Stripe (legacy)
