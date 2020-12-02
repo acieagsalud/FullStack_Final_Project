@@ -1,20 +1,22 @@
-<h1>All <%= @categories.count %> Categories</h1>
+<div class="container text-center text-md-left pt-4 pt-md-5">
+  <h1>All <%= @categories.count %> Categories</h1>
 
-<% if @categories.empty? %>
- <p>There are currently no categories of products in our store. Something must have gone wrong.</p>
-<% else %>
-  <ol>
-    <% @categories.each do |category| %>
-      <li>
-        <%= category.name %>
-        <ul>
-          <% category.subcategories.each do |subcategory| %>
-            <li>
-              <%= link_to "#{subcategory.name}", subcategory %>
-            </li>
-          <% end %>
-        </ul>
-      </li>
-    <% end %>
-  </ol>
-<% end %>
+  <% if @categories.empty? %>
+  <p>There are currently no categories of products in our store. Something must have gone wrong.</p>
+  <% else %>
+    <ol>
+      <% @categories.each do |category| %>
+        <li>
+          <%= category.name %>
+          <ul>
+            <% category.subcategories.each do |subcategory| %>
+              <li>
+                <%= link_to "#{subcategory.name}", subcategory %>
+              </li>
+            <% end %>
+          </ul>
+        </li>
+      <% end %>
+    </ol>
+  <% end %>
+</div>
