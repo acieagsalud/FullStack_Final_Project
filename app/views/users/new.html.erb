@@ -1,12 +1,24 @@
-<h1>Sign Up</h1>
-<%= form_with(url: sign_up_path, local: true, method: "post", action: "sign_up") do %>
-  <div>
-    <p>Username </p><%= text_field_tag(:username) %>
-    <p>Password </p><%= password_field_tag(:password) %>
-    <p>Name </p><%= text_field_tag(:name) %>
-    <p>Email </p><%= text_field_tag(:email) %>
-    <p>Address </p><%= text_field_tag(:address) %>
-    <p>Province </p><%= select_tag "province", options_from_collection_for_select(Province.all, "id", "name") %>
-    <div><%= submit_tag("Create User") %></div>
+<div class="container text-center text-md-left pt-4 pt-md-5">
+  <div class="justify-content-center mt-3">
+  <div class="col-8 m-auto">
+    <div class="card text-center text-grey bg-light">
+      <h1 class="card-header text-grey">Sign-Up</h1>
+      <div class="card-body">
+        <%= form_with(url: sign_up_path, local: true, method: "post", action: "sign_up") do %>
+          <div class="login-form">
+            <p>Username </p><%= text_field_tag(:username) %>
+            <p>Password </p><%= password_field_tag(:password) %>
+            <p>Confirm Password </p><%= password_field_tag(:password2) %>
+            <p>Name </p><%= text_field_tag(:name) %>
+            <p>Email </p><%= text_field_tag(:email) %>
+            <p>Address </p><%= text_field_tag(:address) %>
+            <p>Province </p><%= select_tag "province", options_from_collection_for_select(Province.all, "id", "name") %>
+            <br>
+            <div><%= submit_tag("Create User") %></div>
+          </div>
+        <% end %>
+      </div>
+    </div>
   </div>
-<% end %>
+  </div>
+</div>
